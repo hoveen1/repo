@@ -1,0 +1,392 @@
+SELECT 
+    *
+FROM
+    youtube;
+
+-- removing unnecessary columns from the database.
+
+ALTER TABLE youtube 
+	DROP COLUMN video_views_rank,
+    DROP COLUMN Abbreviation,
+	DROP COLUMN Title,
+	DROP COLUMN Longitude,
+	DROP COLUMN Population,
+	DROP COLUMN Urban_Population,
+	DROP COLUMN `Unemployment rate`,
+	DROP COLUMN `Gross tertiary education enrollment (%)`;
+
+-- turning off safe update mode, then deleting all records with less than 100 uploads 
+SET SQL_SAFE_UPDATES = 0;
+
+DELETE FROM youtube 
+WHERE
+    uploads < 101;
+
+SET SQL_SAFE_UPDATES = 0;
+
+-- changing all month names to their corresponding number. I'm opting for individual queries instead of CASE statment for simplicity.
+
+UPDATE youtube 
+SET 
+    created_month = 1
+WHERE
+    created_month = 'Jan';
+
+UPDATE youtube 
+SET 
+    created_month = 2
+WHERE
+    created_month = 'Feb';
+
+UPDATE youtube 
+SET 
+    created_month = 3
+WHERE
+    created_month = 'Mar';
+
+UPDATE youtube 
+SET 
+    created_month = 4
+WHERE
+    created_month = 'Apr';
+
+UPDATE youtube 
+SET 
+    created_month = 5
+WHERE
+    created_month = 'May';
+
+UPDATE youtube 
+SET 
+    created_month = 6
+WHERE
+    created_month = 'Jun';
+
+UPDATE youtube 
+SET 
+    created_month = 7
+WHERE
+    created_month = 'Jul';
+
+UPDATE youtube 
+SET 
+    created_month = 8
+WHERE
+    created_month = 'Aug';
+
+UPDATE youtube 
+SET 
+    created_month = 9
+WHERE
+    created_month = 'Sep';
+
+UPDATE youtube 
+SET 
+    created_month = 10
+WHERE
+    created_month = 'Oct';
+
+UPDATE youtube 
+SET 
+    created_month = 11
+WHERE
+    created_month = 'Nov';
+
+UPDATE youtube 
+SET 
+    created_month = 12
+WHERE
+    created_month = 'Dec';
+
+-- creating a new column for a concentrated date column.
+    
+    ALTER TABLE youtube
+    ADD date_created date;
+    
+    
+-- combining all three 'year', 'month', and 'day' fields into the newly created date field.
+    
+UPDATE youtube 
+SET 
+    date_created = CONCAT(created_year,
+            '-',
+            created_month,
+            '-',
+            created_date);
+
+-- dropping the original individual date columns.
+
+ALTER TABLE youtube
+    DROP COLUMN created_year,
+    DROP COLUMN created_month,
+    DROP COLUMN created_date;
+    
+-- replacing all of the 'nan' values with NULL
+ 
+    
+SELECT 
+    *
+FROM
+    youtube
+WHERE
+    category = NULL;
+    
+UPDATE youtube 
+SET 
+    category = NULL
+WHERE
+    category = 'nan';
+    
+	UPDATE youtube 
+SET 
+    country_rank = NULL
+WHERE
+    country_rank = 'nan';
+    
+UPDATE youtube 
+SET 
+    channel_type_rank = NULL
+WHERE
+    channel_type_rank = 'nan';
+    
+	UPDATE youtube 
+SET 
+    subscribers_for_last_30_days = NULL
+WHERE
+    subscribers_for_last_30_days = 'nan';
+    
+    
+    -- updating the values from channel_type to category where there is a NULL value in category
+    
+    UPDATE youtube
+SET category = channel_type
+WHERE category IS NULL AND channel_type IS NOT NULL;
+
+    
+    
+    --  changing each column to their appropriate datatype, because importing data from a json file read the fields as text. 
+    
+    SHOW FIELDS FROM youtube;
+    
+    
+    ALTER TABLE youtube
+		MODIFY COLUMN `rank` INT,
+        MODIFY COLUMN `Youtuber` VARCHAR(225),
+        MODIFY COLUMN `subscribers` INT,
+        MODIFY COLUMN `video views` BIGINT,
+        MODIFY COLUMN `category` VARCHAR(225),
+        MODIFY COLUMN `uploads` INT,
+        MODIFY COLUMN `Country` VARCHAR(225),
+        MODIFY COLUMN `Abbreviation` VARCHAR(225),
+        MODIFY COLUMN `channel_type` VARCHAR(225),
+        MODIFY COLUMN `video_views_rank` INT,
+        MODIFY COLUMN `country_rank` INT,
+        MODIFY COLUMN `channel_type_rank` INT,
+        MODIFY COLUMN `video_views_for_the_last_30_days` BIGINT,
+        MODIFY COLUMN `lowest_monthly_earnings` INT,
+        MODIFY COLUMN `highest_monthly_earnings` INT,
+        MODIFY COLUMN `lowest_yearly_earnings` INT,
+        MODIFY COLUMN `highest_yearly_earnings` INT,
+        MODIFY COLUMN `subscribers_for_last_30_days` INT
+        ;
+        
+
+
+    -- about %10 of the 'Youtuber' field was corrupted with the '������' charachter, I opted to delete those records for consistancy
+    -- "EDIT" in hindsight, I should have kept those records, even if the name didn't make sense in some cases.
+    
+SELECT * FROM youtube
+WHERE Youtuber LIKE '%�%';
+
+DELETE FROM youtube
+WHERE Youtuber LIKE '%�%';
+
+
+-- there was an anomoly in the data where YouTube's official channel was said to have been created since 1970.
+
+SELECT `rank`, Youtuber, date_created
+FROM youtube
+WHERE Youtuber LIKE 'YouTube';
+
+UPDATE youtube 
+SET 
+    date_created = '2005-10-28'
+WHERE
+    `rank` = 102;
+
+SELECT category, SUM(`video views`) AS total_views
+FROM youtube
+GROUP BY category
+ORDER BY total_views DESC;
+
+-- As I was trying to restore the rank of each channel, I realiezed that the table doesn't have a primary key.
+
+SHOW CREATE TABLE youtube;
+
+ALTER TABLE youtube
+ADD COLUMN id INT AUTO_INCREMENT PRIMARY KEY FIRST;
+
+
+-- re-ranking the "rank", "country rank", and "channel_type_rank" columns on "video views" based on the new data.
+
+UPDATE youtube AS y1
+JOIN (
+    SELECT Youtuber, `video views`,
+           ROW_NUMBER() OVER (ORDER BY `video views` DESC) AS new_rank
+    FROM youtube
+) AS y2 ON y1.Youtuber = y2.Youtuber
+SET y1.rank = y2.new_rank
+;
+
+
+UPDATE youtube AS y1
+JOIN (
+    SELECT Country, SUM(`video views`) AS total_views,
+           ROW_NUMBER() OVER (ORDER BY SUM(`video views`) DESC) AS new_country_rank
+    FROM youtube
+    GROUP BY Country
+) AS y2 ON y1.Country = y2.Country
+SET y1.country_rank = y2.new_country_rank
+;
+
+
+UPDATE youtube AS y1
+JOIN (
+    SELECT channel_type, SUM(`video views`) AS total_views,
+           ROW_NUMBER() OVER (ORDER BY SUM(`video views`) DESC) AS new_channel_type_rank
+    FROM youtube
+    GROUP BY channel_type
+) AS y2 ON y1.channel_type = y2.channel_type
+SET y1.channel_type_rank = y2.new_channel_type_rank
+;
+
+
+-- renaming the column names for practicality (should have done this in the beginning).
+
+ALTER TABLE youtube
+CHANGE `rank` ranking INT,
+CHANGE Youtuber youtuber VARCHAR(225),
+CHANGE `video views` total_views BIGINT,
+CHANGE Country country VARCHAR(225)
+;
+
+-- creating views to be imported to Power BI.
+
+-- YouTuber Metrics view.
+
+CREATE VIEW youtuber_metrics AS
+SELECT
+id,
+youtuber,
+subscribers,
+total_views,
+highest_monthly_earnings,
+highest_yearly_earnings
+FROM youtube
+;
+
+
+-- top performers by category view.
+
+CREATE VIEW top_youtuber_by_category AS
+SELECT 
+    category,
+    youtuber AS top_youtuber,
+    subscribers AS total_subscribers,
+    total_views AS total_video_views,
+    uploads AS total_uploads
+FROM (
+    SELECT
+        category,
+        youtuber,
+        subscribers,
+        total_views,
+        uploads,
+        ROW_NUMBER() OVER (PARTITION BY category ORDER BY total_views DESC) AS rn
+    FROM youtube
+) ranked
+WHERE rn = 1
+ORDER BY total_video_views DESC
+;
+
+
+-- country analysis view.
+
+
+CREATE VIEW country_analysis AS
+SELECT
+    country,
+    COUNT(*) AS total_youtubers,
+    SUM(subscribers) AS total_subscribers,
+    SUM(total_views) AS total_video_views,
+    AVG(highest_monthly_earnings) AS highest_monthly_earnings,
+    AVG(highest_yearly_earnings) AS highest_yearly_earnings,
+    SUM(highest_yearly_earnings) / COUNT(*) AS avg_earnings_per_youtuber
+FROM youtube
+WHERE highest_yearly_earnings > 10000
+GROUP BY country
+;
+
+
+-- category analysis view.
+
+
+CREATE VIEW category_analysis AS
+SELECT
+    category,
+    COUNT(*) AS total_youtubers,
+    SUM(subscribers) AS total_subscribers,
+    SUM(total_views) AS total_video_views,
+    AVG(highest_monthly_earnings) AS highest_monthly_earnings,
+    AVG(highest_yearly_earnings) AS highest_yearly_earnings,
+	SUM(highest_yearly_earnings) / COUNT(*) AS avg_earnings_per_youtuber
+FROM youtube
+GROUP BY category;
+
+
+-- creating trending YouTubers view.
+
+CREATE VIEW trending_youtubers AS
+SELECT
+youtuber,
+subscribers AS total_subscribers,
+subscribers_for_last_30_days AS new_subscribers_last_30_days,
+ROUND(CAST(subscribers_for_last_30_days AS FLOAT) / NULLIF(subscribers, 0) * 100, 2) AS subscriber_growth_percentage
+FROM youtube
+WHERE subscribers_for_last_30_days IS NOT NULL
+ORDER BY subscriber_growth_percentage DESC;
+
+
+
+-- creating a view for views per upload and subscriber
+
+CREATE VIEW views_per_upload AS
+SELECT
+youtuber,
+total_views,
+uploads,
+subscribers,
+ROUND(total_views / uploads, 0) AS avg_view_per_upload,
+ROUND(total_views / subscribers, 0) AS avg_view_per_subsriber
+FROM youtube
+ORDER BY avg_view_per_upload DESC;
+
+
+
+-- creating a view to calculate average subscriber growth per day since channel creation.
+
+
+CREATE VIEW subscriber_growth_rate AS
+SELECT
+youtuber,
+subscribers,
+date_created,
+DATEDIFF(CURRENT_DATE(), date_created) AS days_since_creation,
+ROUND(subscribers / DATEDIFF(CURRENT_DATE(), date_created)) AS subscriber_growth_per_day
+FROM youtube
+ORDER BY subscriber_growth_per_day DESC;
+
+
+
+
+
