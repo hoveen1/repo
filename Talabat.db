@@ -1,0 +1,281 @@
+
+-- Starting by creating four tables for our database, Orders, Customers and Restaurant
+
+CREATE TABLE Orders (
+    order_id INT PRIMARY KEY,
+    customer_id INT,
+    restaurant_id INT,
+    order_date DATETIME,
+    delivery_address VARCHAR(255),
+    order_total DECIMAL(10 , 2 ),
+    delivery_status VARCHAR(50)
+);
+    
+    
+CREATE TABLE Customers (
+    customer_id INT PRIMARY KEY,
+    customer_name VARCHAR(100),
+    email_address VARCHAR(100),
+    phone_number VARCHAR(15),
+    registration_date DATE
+);
+    
+    
+CREATE TABLE Restaurants (
+    restaurant_id INT PRIMARY KEY,
+    restaurant_name VARCHAR(100),
+    cuisine_type VARCHAR(100),
+    location VARCHAR(255),
+    opening_hours VARCHAR(50)
+);
+    
+
+-- populating the Customers table
+
+INSERT INTO Customers (customer_id, customer_name, email_address, phone_number, registration_date)
+VALUES
+    (1, 'Ali Ahmed', 'ali@example.com', '123456789', '2023-01-01'),
+    (2, 'Fatima Hassan', 'fatima@example.com', '987654321', '2023-01-02'),
+    (3, 'Hassan Abdullah', 'hassan@example.com', '456789123', '2023-01-03'),
+    (4, 'Layla Omar', 'layla@example.com', '789123456', '2023-01-04'),
+    (5, 'Ahmed Mahmoud', 'ahmed@example.com', '321654987', '2023-01-05'),
+    (6, 'Noura Ali', 'noura@example.com', '654987321', '2023-01-06'),
+    (7, 'Sami Hassan', 'sami@example.com', '159263487', '2023-01-07'),
+    (8, 'Aisha Khalid', 'aisha@example.com', '357951246', '2023-01-08'),
+    (9, 'Omar Ali', 'omar@example.com', '369258147', '2023-01-09'),
+    (10, 'Yara Hassan', 'yara@example.com', '258369147', '2023-01-10'),
+    (11, 'Mohammed Ahmad', 'mohammed@example.com', '456123789', '2023-01-11'),
+    (12, 'Sarah Ahmed', 'sarah@example.com', '852741369', '2023-01-12'),
+    (13, 'Ahmed Mohammed', 'ahmedm@example.com', '951357456', '2023-01-13'),
+    (14, 'Nadia Khalid', 'nadia@example.com', '753159852', '2023-01-14'),
+    (15, 'Hala Ali', 'hala@example.com', '159357258', '2023-01-15'),
+    (16, 'Zaid Hassan', 'zaid@example.com', '753159852', '2023-01-16'),
+    (17, 'Lina Ahmed', 'lina@example.com', '951753258', '2023-01-17'),
+    (18, 'Sara Khalid', 'sarak@example.com', '357159263', '2023-01-18'),
+    (19, 'Ahmed Omar', 'ahmedo@example.com', '951753258', '2023-01-19'),
+    (20, 'Youssef Hassan', 'youssef@example.com', '357951753', '2023-01-20'),
+    (21, 'Laila Mohammed', 'lailam@example.com', '159753258', '2023-01-21'),
+    (22, 'Amina Ahmed', 'amina@example.com', '753159258', '2023-01-22'),
+    (23, 'Fadi Khalid', 'fadi@example.com', '159753258', '2023-01-23'),
+    (24, 'Hussein Omar', 'hussein@example.com', '753159258', '2023-01-24'),
+    (25, 'Salma Ali', 'salma@example.com', '159753258', '2023-01-25'),
+    (26, 'Nadia Hassan', 'nadia@example.com', '753159258', '2023-01-26'),
+    (27, 'Omar Mahmoud', 'omarm@example.com', '159753258', '2023-01-27'),
+    (28, 'Leila Ahmed', 'leila@example.com', '753159258', '2023-01-28'),
+    (29, 'Yara Hassan', 'yarah@example.com', '159753258', '2023-01-29'),
+    (30, 'Khalid Omar', 'khalido@example.com', '753159258', '2023-01-30'),
+    (31, 'Nadia Khalid', 'nadiak@example.com', '159753258', '2023-01-31'),
+    (32, 'Ali Mahmoud', 'alim@example.com', '753159258', '2023-02-01'),
+    (33, 'Fatima Hassan', 'fatimah@example.com', '159753258', '2023-02-02'),
+    (34, 'Ahmed Ali', 'ahmeda@example.com', '753159258', '2023-02-03'),
+    (35, 'Layla Omar', 'laylao@example.com', '159753258', '2023-02-04'),
+    (36, 'Hassan Mahmoud', 'hassanm@example.com', '753159258', '2023-02-05'),
+    (37, 'Noura Ali', 'nouraa@example.com', '159753258', '2023-02-06'),
+    (38, 'Sami Hassan', 'samih@example.com', '753159258', '2023-02-07'),
+    (39, 'Aisha Khalid', 'aishak@example.com', '159753258', '2023-02-08'),
+    (40, 'Omar Ali', 'omara@example.com', '753159258', '2023-02-09'),
+    (41, 'Yara Hassan', 'yaraha@example.com', '159753258', '2023-02-10'),
+    (42, 'Mohammed Ahmad', 'mohammeda@example.com', '753159258', '2023-02-11'),
+    (43, 'Sarah Ahmed', 'sahara@example.com', '159753258', '2023-02-12'),
+    (44, 'Ahmed Mohammed', 'ahmedmo@example.com', '753159258', '2023-02-13'),
+    (45, 'Nadia Khalid', 'nadiakh@example.com', '159753258', '2023-02-14'),
+    (46, 'Hala Ali', 'halaa@example.com', '753159258', '2023-02-15'),
+    (47, 'Zaid Hassan', 'zaidh@example.com', '159753258', '2023-02-16'),
+    (48, 'Lina Ahmed', 'linaa@example.com', '753159258', '2023-02-17'),
+    (49, 'Sara Khalid', 'sarak@example.com', '159753258', '2023-02-18'),
+    (50, 'Ahmed Omar', 'ahmedo@example.com', '753159258', '2023-02-19');
+
+-- populating the Restaurants table
+
+INSERT INTO Restaurants (restaurant_id, restaurant_name, cuisine_type, location, opening_hours)
+VALUES
+    (1, 'Al Reef Restaurant', 'Arabic', 'Erbil', '10:00 - 22:00'),
+    (2, 'Nawroz Fast Food', 'Fast Food', 'Sulaymaniyah', '08:00 - 00:00'),
+    (3, 'Pasha Restaurant', 'Turkish', 'Duhok', '11:00 - 23:00'),
+    (4, 'Royal Palace', 'Indian', 'Erbil', '12:00 - 21:00'),
+    (5, 'Arabian Nights', 'Arabic', 'Sulaymaniyah', '10:00 - 23:00'),
+    (6, 'Golden Wings', 'American', 'Erbil', '09:00 - 23:00'),
+    (7, 'Pizza Hut', 'Italian', 'Duhok', '11:00 - 00:00'),
+    (8, 'Sushi Bar', 'Japanese', 'Erbil', '12:00 - 22:00'),
+    (9, 'Cafe Supreme', 'Cafe', 'Sulaymaniyah', '08:00 - 22:00'),
+    (10, 'Burger Town', 'Fast Food', 'Erbil', '10:00 - 00:00'),
+    (11, 'Shawarma Palace', 'Arabic', 'Duhok', '12:00 - 23:00'),
+    (12, 'Pasta Italia', 'Italian', 'Erbil', '11:00 - 22:00'),
+    (13, 'Kabab House', 'Arabic', 'Sulaymaniyah', '10:00 - 22:00'),
+    (14, 'Fried Chicken Express', 'Fast Food', 'Erbil', '09:00 - 23:00'),
+    (15, 'Tandoori Oven', 'Indian', 'Duhok', '12:00 - 21:00'),
+    (16, 'Biryani King', 'Indian', 'Erbil', '11:00 - 22:00'),
+    (17, 'Falafel Corner', 'Arabic', 'Sulaymaniyah', '10:00 - 22:00'),
+    (18, 'BBQ Shack', 'American', 'Erbil', '12:00 - 23:00'),
+    (19, 'Thai Spice', 'Thai', 'Duhok', '11:00 - 22:00'),
+    (20, 'Doner Kebab', 'Turkish', 'Erbil', '10:00 - 00:00'),
+    (21, 'Greek Taverna', 'Mediterranean', 'Sulaymaniyah', '12:00 - 22:00'),
+    (22, 'Vegetarian Delight', 'Vegetarian', 'Erbil', '11:00 - 21:00'),
+    (23, 'Fish & Chips', 'Seafood', 'Duhok', '11:00 - 22:00'),
+    (24, 'Mexican Fiesta', 'Mexican', 'Erbil', '12:00 - 23:00'),
+    (25, 'Crepes & Waffles', 'French', 'Sulaymaniyah', '10:00 - 22:00'),
+    (26, 'Szechuan Garden', 'Chinese', 'Erbil', '11:00 - 22:00'),
+    (27, 'Veggie Haven', 'Vegetarian', 'Duhok', '12:00 - 21:00'),
+    (28, 'Korean BBQ', 'Korean', 'Erbil', '11:00 - 23:00'),
+    (29, 'Baghdadi Delights', 'Iraqi', 'Sulaymaniyah', '12:00 - 22:00'),
+    (30, 'Steakhouse Grill', 'American', 'Erbil', '11:00 - 22:00'),
+    (31, 'Lebanese Kitchen', 'Lebanese', 'Duhok', '12:00 - 22:00'),
+    (32, 'Gourmet Burger', 'Fast Food', 'Erbil', '10:00 - 23:00'),
+    (33, 'Cajun Creole', 'American', 'Sulaymaniyah', '11:00 - 22:00'),
+    (34, 'Vietnamese Pho', 'Vietnamese', 'Erbil', '12:00 - 21:00'),
+    (35, 'Spanish Tapas', 'Spanish', 'Duhok', '11:00 - 22:00'),
+    (36, 'Caribbean Cuisine', 'Caribbean', 'Erbil', '10:00 - 23:00'),
+    (37, 'Ethiopian Feast', 'Ethiopian', 'Sulaymaniyah', '12:00 - 21:00'),
+    (38, 'Israeli Deli', 'Israeli', 'Erbil', '11:00 - 22:00'),
+    (39, 'Moroccan Spice', 'Moroccan', 'Duhok', '10:00 - 23:00'),
+    (40, 'Peruvian Grill', 'Peruvian', 'Erbil', '12:00 - 22:00'),
+    (41, 'Filipino Fiesta', 'Filipino', 'Sulaymaniyah', '11:00 - 21:00'),
+    (42, 'Russian Bistro', 'Russian', 'Erbil', '10:00 - 22:00'),
+    (43, 'Afghan Kabuli', 'Afghan', 'Duhok', '12:00 - 21:00'),
+    (44, 'Bangladeshi Bites', 'Bangladeshi', 'Erbil', '11:00 - 23:00'),
+    (45, 'Cuban Cafe', 'Cuban', 'Sulaymaniyah', '10:00 - 22:00'),
+    (46, 'Danish Delicacies', 'Danish', 'Erbil', '12:00 - 22:00'),
+    (47, 'Egyptian Eats', 'Egyptian', 'Duhok', '11:00 - 22:00'),
+    (48, 'Guatemalan Grill', 'Guatemalan', 'Erbil', '10:00 - 23:00'),
+    (49, 'Hawaiian Luau', 'Hawaiian', 'Sulaymaniyah', '12:00 - 21:00'),
+    (50, 'Icelandic Cafe', 'Icelandic', 'Erbil', '11:00 - 22:00');
+
+
+-- populating the Orders table
+
+INSERT INTO Orders (order_id, customer_id, restaurant_id, order_date, delivery_address, order_total, delivery_status)
+VALUES
+    (1, 1, 3, '2023-01-01 12:00:00', '123 Main St', 25.00, 'Delivered'),
+    (2, 2, 5, '2023-01-02 18:30:00', '456 Elm St', 15.50, 'Pending'),
+    (3, 3, 2, '2023-01-03 19:45:00', '789 Oak St', 32.75, 'In Progress'),
+    (4, 4, 1, '2023-01-04 13:20:00', '987 Cedar St', 27.90, 'Delivered'),
+    (5, 5, 7, '2023-01-05 20:10:00', '321 Pine St', 18.25, 'Pending'),
+    (6, 6, 9, '2023-01-06 14:45:00', '654 Maple St', 40.00, 'Delivered'),
+    (7, 7, 6, '2023-01-07 17:30:00', '789 Walnut St', 22.50, 'In Progress'),
+    (8, 8, 8, '2023-01-08 11:00:00', '234 Birch St', 35.75, 'Delivered'),
+    (9, 9, 10, '2023-01-09 12:40:00', '567 Spruce St', 19.80, 'Pending'),
+    (10, 10, 4, '2023-01-10 21:15:00', '890 Chestnut St', 28.60, 'In Progress'),
+    (11, 11, 15, '2023-01-11 16:00:00', '345 Elm St', 23.50, 'Delivered'),
+    (12, 12, 12, '2023-01-12 19:30:00', '678 Oak St', 17.75, 'Pending'),
+    (13, 13, 18, '2023-01-13 12:20:00', '901 Pine St', 36.20, 'In Progress'),
+    (14, 14, 20, '2023-01-14 22:00:00', '234 Maple St', 29.90, 'Delivered'),
+    (15, 15, 25, '2023-01-15 14:45:00', '567 Walnut St', 20.40, 'Delivered'),
+    (16, 16, 11, '2023-01-16 17:30:00', '890 Birch St', 33.75, 'Pending'),
+    (17, 17, 23, '2023-01-17 11:00:00', '123 Spruce St', 15.80, 'In Progress'),
+    (18, 18, 14, '2023-01-18 21:15:00', '456 Chestnut St', 27.60, 'Pending'),
+    (19, 19, 16, '2023-01-19 18:00:00', '789 Elm St', 24.25, 'Delivered'),
+    (20, 20, 21, '2023-01-20 10:30:00', '987 Oak St', 19.90, 'In Progress'),
+    (21, 21, 19, '2023-01-21 14:20:00', '321 Pine St', 30.00, 'Delivered'),
+    (22, 22, 22, '2023-01-22 17:00:00', '654 Cedar St', 26.50, 'Pending'),
+    (23, 23, 24, '2023-01-23 19:30:00', '890 Maple St', 22.75, 'Delivered'),
+    (24, 24, 13, '2023-01-24 22:10:00', '234 Walnut St', 18.20, 'In Progress'),
+    (25, 25, 10, '2023-01-25 12:45:00', '567 Birch St', 35.40, 'Delivered'),
+    (26, 26, 8, '2023-01-26 15:30:00', '901 Spruce St', 28.60, 'Pending'),
+    (27, 27, 6, '2023-01-27 11:20:00', '123 Chestnut St', 24.75, 'Delivered'),
+    (28, 28, 4, '2023-01-28 17:00:00', '456 Elm St', 20.90, 'In Progress'),
+    (29, 29, 15, '2023-01-29 19:45:00', '789 Oak St', 32.00, 'Pending'),
+    (30, 30, 25, '2023-01-30 14:30:00', '987 Pine St', 26.20, 'Delivered'),
+    (31, 31, 20, '2023-02-01 22:00:00', '234 Maple St', 18.50, 'Delivered'),
+    (32, 32, 19, '2023-02-02 16:30:00', '567 Walnut St', 33.75, 'Pending'),
+    (33, 33, 14, '2023-02-03 12:15:00', '890 Birch St', 26.80, 'In Progress'),
+    (34, 34, 11, '2023-02-04 18:45:00', '123 Spruce St', 22.20, 'Delivered'),
+    (35, 35, 23, '2023-02-05 20:00:00', '456 Chestnut St', 15.90, 'Pending'),
+    (36, 36, 16, '2023-02-06 10:00:00', '789 Elm St', 28.40, 'In Progress'),
+    (37, 37, 21, '2023-02-07 13:30:00', '987 Oak St', 19.75, 'Delivered'),
+    (38, 38, 24, '2023-02-08 15:45:00', '321 Pine St', 32.60, 'Delivered'),
+    (39, 39, 13, '2023-02-09 19:00:00', '654 Cedar St', 27.20, 'Pending'),
+    (40, 40, 22, '2023-02-10 21:20:00', '890 Maple St', 23.85, 'In Progress'),
+    (41, 41, 10, '2023-02-11 11:10:00', '234 Walnut St', 16.40, 'Delivered'),
+    (42, 42, 8, '2023-02-12 18:30:00', '567 Birch St', 30.75, 'Pending'),
+    (43, 43, 6, '2023-02-13 12:45:00', '901 Spruce St', 25.20, 'In Progress'),
+    (44, 44, 4, '2023-02-14 16:00:00', '123 Chestnut St', 19.60, 'Delivered'),
+    (45, 45, 15, '2023-02-15 18:20:00', '456 Elm St', 31.40, 'Pending'),
+    (46, 46, 12, '2023-02-16 20:30:00', '789 Oak St', 26.75, 'Delivered'),
+    (47, 47, 18, '2023-02-17 14:50:00', '987 Cedar St', 22.80, 'In Progress'),
+    (48, 48, 20, '2023-02-18 18:00:00', '678 Oak St', 22.00, 'Pending'),
+    (49, 49, 9, '2023-02-19 11:30:00', '123 Pine St', 14.75, 'In Progress'),
+    (50, 50, 22, '2023-02-20 14:20:00', '456 Maple St', 30.50, 'Delivered');
+
+
+-- viewing the tables one last time to check if everything is in order
+    
+SELECT 
+    *
+FROM
+    Customers;
+    
+SELECT 
+    *
+FROM
+    Restaurants;
+    
+SELECT 
+    *
+FROM
+    DeliveryPersonnel;
+    
+SELECT 
+    *
+FROM
+    Orders;
+
+
+-- i will create multiple views to export to Looker, to be used to visualize the insights gathered from the synthetic data
+
+CREATE VIEW AverageOrderTotalPerCustomer AS
+    SELECT 
+        c.customer_id,
+        c.customer_name,
+        AVG(o.order_total) AS avg_order_total
+    FROM
+        Customers c
+            JOIN
+        Orders o ON c.customer_id = o.customer_id
+    GROUP BY c.customer_id , c.customer_name
+    ORDER BY avg_order_total DESC;
+	
+    -- creating a view to calculate average order total per restaurant
+    
+CREATE VIEW AverageOrderTotalPerRestaurant AS
+    SELECT 
+        r.restaurant_id,
+        r.restaurant_name,
+        r.cuisine_type,
+        AVG(o.order_total) AS avg_order_total
+    FROM
+        Restaurants r
+            JOIN
+        Orders o ON r.restaurant_id = o.restaurant_id
+    GROUP BY r.restaurant_id , r.restaurant_name , r.cuisine_type
+    ORDER BY avg_order_total DESC;
+
+
+-- creating a view to analyze the most popular cuisine type by counting the number of orders per cuisine
+
+CREATE VIEW OrderCountPerCuisineType AS
+    SELECT 
+        r.cuisine_type, COUNT(o.order_id) AS order_count
+    FROM
+        Restaurants r
+            JOIN
+        Orders o ON r.restaurant_id = o.restaurant_id
+    GROUP BY r.cuisine_type
+    ORDER BY order_count DESC;
+    
+    
+-- creating a view to calcuate the average order total per cuisiine which gives a different insight from order count per cuisine
+
+CREATE VIEW AverageOrderTotalPerCuisine AS
+    SELECT 
+        r.cuisine_type, AVG(o.order_total) AS average_order_total
+    FROM
+        Restaurants r
+            JOIN
+        Orders o ON r.restaurant_id = o.restaurant_id
+    GROUP BY r.cuisine_type
+    ORDER BY average_order_total DESC;
+
+
+
+
+
